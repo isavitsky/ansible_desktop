@@ -1,0 +1,23 @@
+[Desktop Entry]
+DefaultProfile=UR5VIB.profile
+
+[Favorite Profiles]
+Favorites=UR5VIB.profile,Shell.profile,RIOT.profile
+
+[KFileDialog Settings]
+Recent Files[$e]=
+Recent URLs[$e]=
+detailViewIconSize=0
+
+[KonsoleWindow]
+SaveGeometryOnExit=false
+
+[MainWindow]
+RestorePositionForNextInstance=false
+State=AAAA/wAAAAD9AAAAAAAABEcAAAKgAAAABAAAAAQAAAAIAAAACPwAAAAA
+ToolBarsMovable=Disabled
+eDP1 XPosition=0
+eDP1 YPosition=29
+
+[Notification Messages]
+ShowPasteUnprintableWarning=false

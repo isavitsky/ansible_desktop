@@ -1,0 +1,139 @@
+---
+- hosts: localhost
+  connection: local
+
+  tasks:
+  - name: install packages with pacman
+    become: true
+    package: 
+      name:
+        - htop
+        - tmux
+        - vim
+        - yay
+        - yt-dlp
+        - mpv
+        - mc
+        - chromium
+        - docker
+        - inkscape
+        - iperf3
+        - keepassxc
+        - lrzsz
+        - mtr
+        - networkmanager-strongswan
+        - opera
+        - opera-ffmpeg-codecs
+        - pavucontrol-qt
+        - picocom
+        - pv
+        - screen
+        - tcpdump
+        - traceroute
+        - virtualbox-host-dkms
+        - virtualbox-guest-iso
+        - virtualbox
+        - vagrant
+        - wireshark-qt
+        - yubikey-manager-qt
+        - xdotool
+
+  - name: install ff2mpv-native-messaging-host-git with yay
+    become: true
+    yay: name=ff2mpv-native-messaging-host-git state=latest
+
+  - name: install ttf-iosevka-term state=latest with yay
+    become: true
+    yay: name=ttf-iosevka-term state=latest
+
+  - name: install apg with yay
+    become: true
+    yay: name=apg state=latest
+
+  - name: install aria2 with yay
+    become: true
+    yay: name=aria2 state=latest
+
+  - name: install asbru-cm with yay
+    become: true
+    yay: name=asbru-cm state=latest
+
+  - name: install cqrlog-bin with yay
+    become: true
+    yay: name=cqrlog-bin state=latest
+
+  - name: install google-chrome with yay
+    become: true
+    yay: name=google-chrome state=latest
+
+  - name: install telegram-desktop-bin with yay
+    become: true
+    yay: name=telegram-desktop-bin
+
+  - name: install slack-desktop with yay
+    become: true
+    yay: name=slack-desktop state=latest
+
+  - name: install skypeforlinux-preview-bin with yay
+    become: true
+    yay: name=skypeforlinux-preview-bin state=latest
+
+  - name: install ookla-speedtest-bin with yay
+    become: true
+    yay: name=ookla-speedtest-bin state=latest
+
+  - name: install ocenaudio-bin with yay
+    become: true
+    yay: name=ocenaudio-bin state=latest
+
+  - name: install openorienteering-mapper with yay
+    become: true
+    yay: name=openorienteering-mapper state=latest
+
+  - name: install passwordsafe with yay
+    become: true
+    yay: name=passwordsafe state=latest
+
+  - name: install peervpn with yay
+    become: true
+    yay: name=peervpn state=latest
+
+  - name: install platformio with yay
+    become: true
+    yay: name=platformio state=latest
+
+  - name: install visual-studio-code-bin with yay
+    become: true
+    yay: name=visual-studio-code-bin state=latest
+
+  - name: install vokoscreen-git with yay
+    become: true
+    yay: name=vokoscreen-git state=latest
+
+  - name: install winbox with yay
+    become: true
+    yay: name=winbox state=latest
+
+  - name: install yubikey-agent with yay
+    become: true
+    yay: name=yubikey-agent state=latest
+
+  - name: install keepass-plugin-otpkeyprov with yay
+    become: true
+    yay: name=keepass-plugin-otpkeyprov state=latest
+
+  - name: install zoom with yay
+    become: true
+    yay: name=zoom state=latest
+
+  - name: install packages with pacman
+    become: true
+    package: 
+      name:
+        - yubikey-manager-qt
+        - yubikey-personalization-gui
+
+  - name: install libinput-gestures with yay
+    become: true
+    yay: name=libinput-gestures state=latest
+

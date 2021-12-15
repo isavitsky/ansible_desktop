@@ -1,0 +1,251 @@
+---
+- hosts: localhost
+  connection: local
+
+  tasks:
+  - name: copy bashrc.local to homedir
+    ansible.builtin.copy:
+      src: files/bashrc.local
+      dest: /home/{{ ansible_user_id }}/.bashrc.local
+
+  - name: add lines to bashrc
+    blockinfile:
+      path: /home/{{  ansible_user_id }}/.bashrc
+      state: present
+      block: |
+        source .bashrc.local
+        [ -f ~/.motd ] && cat ~/.motd
+
+  - name: copy default kglobalshortcutsrc to .config if not exist
+    ansible.builtin.copy:
+      src: files/.config/kglobalshortcutsrc
+      dest: /home/{{ ansible_user_id }}/.config
+      force: no
+      owner: '{{ ansible_user_id }}'
+      mode: 0600
+
+  - name: add Ukrainian layout to kglobalshortcutsrc
+    community.general.ini_file:
+      no_extra_spaces: yes
+      path: /home/{{  ansible_user_id }}/.config/kglobalshortcutsrc
+      section: KDE Keyboard Layout Switcher
+      option: Switch keyboard layout to Ukrainian
+      value: none,none,Switch keyboard layout to Ukrainian
+
+  - name: copy default kxkbrc to .config if not exist
+    ansible.builtin.copy:
+      src: files/.config/kxkbrc
+      dest: /home/{{ ansible_user_id }}/.config
+      force: no
+      owner: '{{ ansible_user_id }}'
+      mode: 0600
+
+  - name: add Ukrainian layout to kxkbrc (1)
+    community.general.ini_file:
+      no_extra_spaces: yes
+      path: /home/{{  ansible_user_id }}/.config/kxkbrc
+      section: Layout
+      option: DisplayNames
+      value: ","
+
+  - name: add Ukrainian layout to kxkbrc (2)
+    community.general.ini_file:
+      no_extra_spaces: yes
+      path: /home/{{  ansible_user_id }}/.config/kxkbrc
+      section: Layout
+      option: LayoutList
+      value: us,ua
+
+  - name: add Ukrainian layout to kxkbrc (3)
+    community.general.ini_file:
+      no_extra_spaces: yes
+      path: /home/{{  ansible_user_id }}/.config/kxkbrc
+      section: Layout
+      option: Model
+      value: pc86
+
+  - name: add Ukrainian layout to kxkbrc (4)
+    community.general.ini_file:
+      no_extra_spaces: yes
+      path: /home/{{  ansible_user_id }}/.config/kxkbrc
+      section: Layout
+      option: VariantList
+      value: ","
+
+  - name: add Ukrainian layout to kxkbrc (5)
+    community.general.ini_file:
+      no_extra_spaces: yes
+      path: /home/{{  ansible_user_id }}/.config/kxkbrc
+      section: Layout
+      option: Options
+      value: ",grp:caps_toggle,grp:menu_switch,compose:ralt"
+
+  - name: add Ukrainian layout to kxkbrc (6)
+    community.general.ini_file:
+      no_extra_spaces: yes
+      path: /home/{{  ansible_user_id }}/.config/kxkbrc
+      section: Layout
+      option: ResetOldOptions
+      value: true
+
+  - name: copy default kcminputrc to .config if not exist
+    ansible.builtin.copy:
+      src: files/.config/kcminputrc
+      dest: /home/{{ ansible_user_id }}/.config
+      force: no
+      owner: '{{ ansible_user_id }}'
+      mode: 0600
+
+  - name: enable NumLock by default
+    community.general.ini_file:
+      no_extra_spaces: yes
+      path: /home/{{  ansible_user_id }}/.config/kcminputrc
+      section: Keyboard
+      option: NumLock
+      value: 0
+
+  - name: restart xkb after layout change
+    become: yes
+    command: udevadm trigger --subsystem-match=input --action=change
+
+  - name: copy default plasma-org.kde.plasma.desktop-appletsrc to .config if not exist
+    ansible.builtin.copy:
+      src: files/.config/plasma-org.kde.plasma.desktop-appletsrc
+      dest: /home/{{ ansible_user_id }}/.config
+      force: no
+      owner: '{{ ansible_user_id }}'
+      mode: 0600
+
+  - name: replace default wallpaper
+    command: qdbus org.kde.plasmashell /PlasmaShell org.kde.PlasmaShell.evaluateScript "var allDesktops = desktops();print (allDesktops);for (i=0;i<allDesktops.length;i++) {d = allDesktops[i];d.wallpaperPlugin = 'org.kde.image';d.currentConfigGroup = Array('Wallpaper', 'org.kde.image', 'General');d.writeConfig('Image', 'file:///usr/share/wallpapers/Path/contents/images/1920x1080.jpg')}"
+
+  - name: copy default kscreenlockerrc to .config if not exist
+    ansible.builtin.copy:
+      src: files/.config/kscreenlockerrc
+      dest: /home/{{ ansible_user_id }}/.config
+      force: no
+      owner: '{{ ansible_user_id }}'
+      mode: 0600
+
+  - name: replace screen lock walpaper
+    command: kwriteconfig5 --file kscreenlockerrc --group Greeter --group Wallpaper --group org.kde.image --group General --key Image "file:///usr/share/wallpapers/Bamboo at Night/contents/images/5120x2880.png"
+
+  - name: set screen switch off timeout on AC power
+    command: kwriteconfig5 --file powermanagementprofilesrc --group AC --group DPMSControl --key idleTime 7200
+
+  - name: set dim screen timeout on AC power
+    command: kwriteconfig5 --file powermanagementprofilesrc --group AC --group DimDisplay --key idleTime 3600000
+
+  - name: set screen switch off timeout on battery power
+    command: kwriteconfig5 --file powermanagementprofilesrc --group Battery --group DPMSControl --key idleTime 1800
+
+  - name: set dim screen timeout on battery power
+    command: kwriteconfig5 --file powermanagementprofilesrc --group Battery --group DimDisplay --key idleTime 900000
+
+  - name: set suspend sesstion timeout on battery power
+    command: kwriteconfig5 --file powermanagementprofilesrc --group Battery --group SuspendSession --key idleTime 2700000
+
+  - name: set upper battery charging threshold
+    command: echo 90 > /sys/class/power_supply/BAT0/charge_stop_threshold
+
+  - name: set lower battery charging threshold
+    command: echo 80 > /sys/class/power_supply/BAT0/charge_start_threshold
+
+  - name: copy configured konsolerc to .config if not exist
+    ansible.builtin.copy:
+      src: files/.config/konsolerc
+      dest: /home/{{ ansible_user_id }}/.config
+      force: no
+      owner: '{{ ansible_user_id }}'
+      mode: 0600
+
+  - name: copy UR5VIB konsole profile to .local if not exist
+    ansible.builtin.copy:
+      src: files/.local/share/konsole/UR5VIB.profile
+      dest: /home/{{ ansible_user_id }}/.local/share/konsole
+      force: no
+      owner: '{{ ansible_user_id }}'
+      mode: 0600
+
+  - name: copy RIOT konsole profile to .local if not exist
+    ansible.builtin.copy:
+      src: files/.local/share/konsole/RIOT.profile
+      dest: /home/{{ ansible_user_id }}/.local/share/konsole
+      force: no
+      owner: '{{ ansible_user_id }}'
+      mode: 0600
+
+  - name: copy DOOM konsole colour scheme to .local if not exist
+    ansible.builtin.copy:
+      src: files/.local/share/konsole/Doom.colorscheme
+      dest: /home/{{ ansible_user_id }}/.local/share/konsole
+      force: no
+      owner: '{{ ansible_user_id }}'
+      mode: 0600
+
+  - name: set default konsole profile
+    command: kwriteconfig5 --file konsolerc --group 'Desktop Entry' --key DefaultProfile UR5VIB.profile
+
+  - name: copy mc config file (ini)
+    ansible.builtin.copy:
+      src: files/.config/mc/ini
+      dest: /home/{{ ansible_user_id }}/.config/mc/
+      force: no
+      owner: '{{ ansible_user_id }}'
+
+  - name: copy mc config file (panels.ini)
+    ansible.builtin.copy:
+      src: files/.config/mc/panels.ini
+      dest: /home/{{ ansible_user_id }}/.config/mc/
+      force: no
+      owner: '{{ ansible_user_id }}'
+
+  - name: copy yakuake.desktop to autostart
+    ansible.builtin.copy:
+      src: /usr/share/applications/org.kde.yakuake.desktop
+      dest: /home/{{ ansible_user_id }}/.config/autostart/
+      force: no
+      owner: '{{ ansible_user_id }}'
+
+  - name: copy yakuakerc to .config
+    ansible.builtin.copy:
+      src: files/.config/yakuakerc
+      dest: /home/{{ ansible_user_id }}/.config/
+      force: no
+      owner: '{{ ansible_user_id }}'
+      mode: 0600
+
+  - name: set Switch to Next Desktop shortcut
+    command: kwriteconfig5 --file kglobalshortcutsrc --group kwin --key "Switch to Next Desktop" "Ctrl+Shift+Right,none,Switch to Next Desktop"
+
+  - name: set Switch to Previous Desktop shortcut
+    command: kwriteconfig5 --file kglobalshortcutsrc --group kwin --key "Switch to Previous Desktop" "Ctrl+Shift+Left,none,Switch to Previous Desktop"
+
+  - name: copy libinput-gestures.conf to .config
+    ansible.builtin.copy:
+      src: files/.config/libinput-gestures.conf
+      dest: /home/{{ ansible_user_id }}/.config/
+      force: no
+      owner: '{{ ansible_user_id }}'
+      mode: 0600
+
+  - name: copy libinput-gestures.desktop to autostart
+    ansible.builtin.copy:
+      src: /usr/share/applications/libinput-gestures.desktop
+      dest: /home/{{ ansible_user_id }}/.config/autostart/
+      force: no
+      owner: '{{ ansible_user_id }}'
+
+  - name: restart libinput-gestures
+    command: libinput-gestures-setup restart
+
+  - name: add launchers to taskbar
+    command: kwriteconfig5 --file plasma-org.kde.plasma.desktop-appletsrc --group Containments --group 2 --group Applets --group 4 --group Configuration --group General --key launchers applications:org.kde.kate.desktop,applications:pavucontrol-qt.desktop,preferred://filemanager,applications:firefox.desktop,applications:google-chrome.desktop,applications:chromium.desktop,applications:ocenaudio.desktop
+
+  - name: add user to groups
+    become: yes
+    user:
+      name: '{{ ansible_user_id }}'
+      groups: vboxusers,wireshark,video,uucp,storage,input,audio
+      append: yes
+
