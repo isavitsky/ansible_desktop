@@ -249,3 +249,6 @@
       groups: vboxusers,wireshark,video,uucp,storage,input,audio
       append: yes
 
+  - name: jumpappify konsole
+    command: jumpappify-desktop-entry /usr/share/applications/org.kde.konsole.desktop > ~/.local/share/applications/org.kde.konsole.desktop
+
