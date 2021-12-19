@@ -137,3 +137,7 @@
     become: true
     yay: name=libinput-gestures state=latest
 
+  - name: install jumpapp with yay
+    become: true
+    yay: name=jumpapp state=latest
+
