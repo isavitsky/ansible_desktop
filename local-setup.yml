@@ -252,3 +252,9 @@
   - name: jumpappify konsole
     command: jumpappify-desktop-entry /usr/share/applications/org.kde.konsole.desktop > ~/.local/share/applications/org.kde.konsole.desktop
 
+  - name: set taskbar height (1)
+    command: kwriteconfig5 --file plasmashellrc --group PlasmaViews --group "Panel 2" --group Defaults --key thickness 45
+
+  - name: set taskbar height (2)
+    command: kwriteconfig5 --file plasmashellrc --group PlasmaViews --group "Panel 2" --group Horizontal1920 --key thickness 45
+

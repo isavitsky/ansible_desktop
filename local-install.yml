@@ -21,6 +21,7 @@
         - keepassxc
         - lrzsz
         - mtr
+        - networkmanager-l2tp
         - networkmanager-strongswan
         - opera
         - opera-ffmpeg-codecs
@@ -37,6 +38,7 @@
         - wireshark-qt
         - yubikey-manager-qt
         - xdotool
+        - xl2tpd
 
   - name: install ff2mpv-native-messaging-host-git with yay
     become: true
@@ -126,7 +128,7 @@
     become: true
     yay: name=zoom state=latest
 
-  - name: install packages with pacman
+  - name: install yubikey packages with pacman
     become: true
     package: 
       name:
@@ -141,3 +143,9 @@
     become: true
     yay: name=jumpapp state=latest
 
+  - name: install Java and Icedtea-Web packages with pacman
+    become: true
+    package: 
+      name:
+        - jre8-openjdk
+        - icedtea-web
