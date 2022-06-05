@@ -1,10 +1,13 @@
 ---
 - hosts: localhost
   connection: local
+  become: true
 
   tasks:
   - name: install packages with pacman
-    become: true
+    tags:
+      - alice
+      - bob
     package: 
       name:
         - htop
@@ -18,7 +21,6 @@
         - docker
         - inkscape
         - iperf3
-        - keepassxc
         - lrzsz
         - mtr
         - networkmanager-l2tp
@@ -40,118 +42,173 @@
         - xdotool
         - xl2tpd
 
+  - name: install keepassxc with pacman
+    tags:
+      - none
+    package: 
+      name:
+        - keepassxc
+
   - name: install ff2mpv-native-messaging-host-git with yay
-    become: true
+    tags:
+      - alice
+      - bob
     yay: name=ff2mpv-native-messaging-host-git state=latest
 
   - name: install ttf-iosevka-term state=latest with yay
-    become: true
+    tags:
+      - alice
+      - bob
     yay: name=ttf-iosevka-term state=latest
 
   - name: install apg with yay
-    become: true
+    tags:
+      - alice
+      - bob
     yay: name=apg state=latest
 
   - name: install aria2 with yay
-    become: true
+    tags:
+      - alice
+      - bob
     yay: name=aria2 state=latest
 
   - name: install asbru-cm with yay
-    become: true
+    tags:
+      - alice
+      - bob
     yay: name=asbru-cm state=latest
 
   - name: install cqrlog-bin with yay
-    become: true
+    tags:
+      - bob
     yay: name=cqrlog-bin state=latest
 
   - name: install google-chrome with yay
-    become: true
+    tags:
+      - alice
+      - bob
     yay: name=google-chrome state=latest
 
   - name: install telegram-desktop-bin with yay
-    become: true
+    tags:
+      - alice
+      - bob
     yay: name=telegram-desktop-bin
 
   - name: install slack-desktop with yay
-    become: true
+    tags:
+      - alice
+      - bob
     yay: name=slack-desktop state=latest
 
   - name: install skypeforlinux-preview-bin with yay
-    become: true
+    tags:
+      - alice
+      - bob
     yay: name=skypeforlinux-preview-bin state=latest
 
   - name: install ookla-speedtest-bin with yay
-    become: true
+    tags:
+      - alice
+      - bob
     yay: name=ookla-speedtest-bin state=latest
 
   - name: install ocenaudio-bin with yay
-    become: true
+    tags:
+      - alice
+      - bob
     yay: name=ocenaudio-bin state=latest
 
   - name: install openorienteering-mapper with yay
-    become: true
+    tags:
+      - bob
     yay: name=openorienteering-mapper state=latest
 
   - name: install passwordsafe with yay
-    become: true
+    tags:
+      - none
     yay: name=passwordsafe state=latest
 
   - name: install peervpn with yay
-    become: true
+    tags:
+      - alice
+      - bob
     yay: name=peervpn state=latest
 
   - name: install platformio with yay
-    become: true
+    tags:
+      - bob
     yay: name=platformio state=latest
 
   - name: install visual-studio-code-bin with yay
-    become: true
+    tags:
+      - bob
     yay: name=visual-studio-code-bin state=latest
 
   - name: install vokoscreen-git with yay
-    become: true
+    tags:
+      - alice
+      - bob
     yay: name=vokoscreen-git state=latest
 
   - name: install winbox with yay
-    become: true
+    tags:
+      - alice
+      - bob
     yay: name=winbox state=latest
 
   - name: install yubikey-agent with yay
-    become: true
+    tags:
+      - alice
+      - bob
     yay: name=yubikey-agent state=latest
 
   - name: install keepass-plugin-otpkeyprov with yay
-    become: true
+    tags:
+      - none
     yay: name=keepass-plugin-otpkeyprov state=latest
 
   - name: install zoom with yay
-    become: true
+    tags:
+      - alice
+      - bob
     yay: name=zoom state=latest
 
   - name: install yubikey packages with pacman
-    become: true
+    tags:
+      - alice
+      - bob
     package: 
       name:
         - yubikey-manager-qt
         - yubikey-personalization-gui
 
   - name: install libinput-gestures with yay
-    become: true
+    tags:
+      - alice
+      - bob
     yay: name=libinput-gestures state=latest
 
   - name: install jumpapp with yay
-    become: true
+    tags:
+      - alice
+      - bob
     yay: name=jumpapp state=latest
 
   - name: install Java and Icedtea-Web packages with pacman
-    become: true
+    tags:
+      - alice
+      - bob
     package: 
       name:
         - jre8-openjdk
         - icedtea-web
 
   - name: install virt-viewer for remote desktop apps with pacman
-    become: true
+    tags:
+      - alice
+      - bob
     package: 
       name:
         - virt-viewer
