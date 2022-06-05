@@ -17,6 +17,7 @@
         - yt-dlp
         - mpv
         - mc
+        - base-devel
         - chromium
         - docker
         - inkscape
