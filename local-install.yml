@@ -146,12 +146,6 @@
       - bob
     yay: name=visual-studio-code-bin state=latest
 
-  - name: install vokoscreen-git with yay
-    tags:
-      - alice
-      - bob
-    yay: name=vokoscreen-git state=latest
-
   - name: install winbox with yay
     tags:
       - alice
@@ -212,3 +206,12 @@
     package: 
       name:
         - virt-viewer
+
+  - name: install vokoscreen-git with pacman
+    tags:
+      - alice
+      - bob
+    package: 
+      name:
+        - vokoscreen
+
