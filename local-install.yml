@@ -149,3 +149,9 @@
       name:
         - jre8-openjdk
         - icedtea-web
+
+  - name: install virt-viewer for remote desktop apps with pacman
+    become: true
+    package: 
+      name:
+        - virt-viewer
