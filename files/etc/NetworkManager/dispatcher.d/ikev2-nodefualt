@@ -14,18 +14,12 @@
 
 remove_vpn4default () {
 	local VPN_DEFROUTE
-	local n
 
 	# For some reason, route is being added more than once,
-	# so delete it in a loop.
-	n=1
+	# so delete it after delay.
+	sleep 2
 	VPN_DEFROUTE=$(ip -4 route show table all | grep -F "default dev $VPN_IP_IFACE")
-	while [[ -n $VPN_DEFROUTE ]] && [[ $n -ne 10 ]]; do
-		ip -4 route delete $VPN_DEFROUTE
-		((n++))
-		sleep 1
-		VPN_DEFROUTE=$(ip -4 route show table all | grep -F "default dev $VPN_IP_IFACE")
-	done
+	ip -4 route delete $VPN_DEFROUTE
 }
 
 while read str; do
