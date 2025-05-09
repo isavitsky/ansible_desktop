@@ -1,0 +1,47 @@
+#!/usr/bin/env bash
+#
+# Current version of NetworkManager IKEv2 connections
+# obey IPSec Traffic Selector from VPN server even
+# if 'Use only for resources on this conneciton' A.K.A.
+# 'never-default' is selected in connection properties.
+# This script fixes that deficiency.
+
+# exit on non-IKEv2 interface
+[[ ! $VPN_IP_IFACE =~ ^nm-xfrm-[0-9a-f] ]] && exit
+
+# continue only if VPN is UP
+[[ $NM_DISPATCHER_ACTION != "vpn-up" ]] && exit
+
+remove_vpn4default () {
+	local VPN_DEFROUTE
+	local n
+
+	# For some reason, route is being added more than once,
+	# so delete it in a loop.
+	n=1
+	VPN_DEFROUTE=$(ip -4 route show table all | grep -F "default dev $VPN_IP_IFACE")
+	while [[ -n $VPN_DEFROUTE ]] && [[ $n -ne 10 ]]; do
+		ip -4 route delete $VPN_DEFROUTE
+		((n++))
+		sleep 1
+		VPN_DEFROUTE=$(ip -4 route show table all | grep -F "default dev $VPN_IP_IFACE")
+	done
+}
+
+while read str; do
+	# search for [ipv4] section
+	[[ -z $ipv4_found ]] && 
+		[[ ! $str =~ ^\s*\[[iI][pP][vV]4\] ]] && continue
+	[[ -z $ipv4_found ]] && ipv4_found=1 && continue
+
+	# search for 'never-default=true' setting
+	if [[ $str =~  ^\s*never-default\s*=\s*true ]]; then
+	       remove_vpn4default
+	       break
+	fi
+	# break on next ini-file [] section
+	if [[ $str =~  ^\s*\[ ]]; then
+	       break
+	fi
+done < "$CONNECTION_FILENAME"
+
